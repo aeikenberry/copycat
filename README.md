@@ -2,6 +2,12 @@
 
 ![](./erb-logo.png)
 
+## TODO
+
+- Settings (Global Hotkey is current Cmd or Ctrl + Shift + C
+- Pictures
+- Focusing issues
+
 Based on the great boilerplate Electron + React project: https://github.com/chentsulin/electron-react-boilerplate and Menubar: https://github.com/maxogden/menubar
 
 [Electron](http://electron.atom.io/) application boilerplate based on [React](https://facebook.github.io/react/), [Redux](https://github.com/reactjs/redux), [React Router](https://github.com/reactjs/react-router), [Webpack](http://webpack.github.io/docs/), [React Transform HMR](https://github.com/gaearon/react-transform-hmr) for rapid application development
