@@ -34,12 +34,12 @@ export default class History extends Component {
 
     key('down', (e) => {
       e.preventDefault();
-      this.handleDownArrow();
+      this.nav('up');
     });
 
     key('up', (e) => {
       e.preventDefault();
-      this.handleUpArrow();
+      this.nav('down');
     });
 
     key('enter', (e) => {
@@ -69,22 +69,6 @@ export default class History extends Component {
     );
   }
 
-  handleDownArrow() {
-    if (!this.state.selected) {
-      this.setState({ selected: this.props.history[0].id });
-      ReactDOM.findDOMNode(this.refs[this.props.history[0].id]).scrollIntoView({
-        block: 'start', behavior: 'smooth'
-      });
-    } else {
-      const index = this.props.history.findIndex(el => el.id === this.state.selected);
-      if (index === this.props.history.length - 1) return;
-      this.setState({ selected: this.props.history[index + 1].id });
-      ReactDOM.findDOMNode(this.refs[this.props.history[index + 1].id]).scrollIntoView({
-        block: 'start', behavior: 'smooth'
-      });
-    }
-  }
-
   handleEnter() {
     if (!this.state.selected) {
       return this.props.selectHistory(this.props.history[0]);
@@ -93,20 +77,32 @@ export default class History extends Component {
     return this.props.selectHistory(_.find(this.props.history, h => h.id === this.state.selected));
   }
 
-  handleUpArrow() {
+  scroll(refID) {
+    ReactDOM.findDOMNode(
+      this.refs[refID]
+    ).scrollIntoView({
+      block: 'start', behavior: 'smooth'
+    });
+  }
+
+  nav(dir) {
+    let next;
+
     if (!this.state.selected) {
-      this.setState({ selected: this.props.history[0].id });
-      ReactDOM.findDOMNode(this.refs[this.props.history[0].id]).scrollIntoView({
-        block: 'start', behavior: 'smooth'
-      });
+      next = this.props.history[0].id;
     } else {
       const index = this.props.history.findIndex(el => el.id === this.state.selected);
-      if (index === 0) return;
-      this.setState({ selected: this.props.history[index - 1].id });
-      ReactDOM.findDOMNode(this.refs[this.props.history[index - 1].id]).scrollIntoView({
-        block: 'start', behavior: 'smooth'
-      });
+      if (dir === 'down') {
+        if (index === 0) return;
+        next = this.props.history[index - 1].id;
+      } else {
+        if (index === this.props.history.length - 1) return;
+        next = this.props.history[index + 1].id;
+      }
     }
+
+    this.setState({ selected: next });
+    this.scroll(next);
   }
 
   render() {
@@ -118,7 +114,10 @@ export default class History extends Component {
           className={this.state.selected === h.id ? 'selected' : ''}
           ref={h.id}
         >
-          <span className={styles.listNumber}>{i + 1}.</span> {h.text.slice(0, 28)}{h.text.length > 28 ? '...' : ''}
+          <span className={styles.listNumber}>
+            {i + 1}.
+          </span>
+          {h.text.slice(0, 28)}{h.text.length > 28 ? '...' : ''}
         </li>
       )
     );
