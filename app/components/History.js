@@ -18,28 +18,33 @@ export default class History extends Component {
     super(options);
     this.state = {
       selected: null,
+      filtered: null
     };
   }
 
   componentDidMount() {
+    this.win = BrowserWindow.getAllWindows()[0];
 
-    const win = BrowserWindow.getAllWindows()[0];
-
-    win.on('blur', () => {
-      if (this.props.history.length) {
-        ReactDOM.findDOMNode(this.refs[this.props.history[0].id]).scrollIntoView();
-        this.setState({ selected: null });
+    this.win.on('blur', () => {
+      const history = this.state.filtered || this.props.history;
+      if (history.length) {
+        ReactDOM.findDOMNode(this.refs[history[0].id]).scrollIntoView();
+        this.setState({ selected: null, filtered: null });
       }
+      window.scrollTo(0, 0);
+      ReactDOM.findDOMNode(this.refs.input).value = '';
     });
+
+    ReactDOM.findDOMNode(this.refs.input).focus();
 
     key('down', (e) => {
       e.preventDefault();
-      this.nav('up');
+      this.nav('down');
     });
 
     key('up', (e) => {
       e.preventDefault();
-      this.nav('down');
+      this.nav('up');
     });
 
     key('enter', (e) => {
@@ -48,8 +53,7 @@ export default class History extends Component {
     });
 
     key('esc', (e) => {
-      e.preventDefault();
-      win.hide();
+      this.win.hide();
     });
 
     setInterval(() => {
@@ -77,27 +81,53 @@ export default class History extends Component {
     return this.props.selectHistory(_.find(this.props.history, h => h.id === this.state.selected));
   }
 
+  handleInputOnKeyUp(e) {
+    switch (e.key) {
+      case 'ArrowDown':
+        return this.nav('down');
+      case 'ArrowUp':
+        return this.nav('up');
+      case 'Enter':
+        return this.handleEnter();
+      case 'Escape':
+        return this.win.hide();
+      default:
+        return this.search(e.target.value);
+    }
+  }
+
+  search(term) {
+    const filtered = this.props.history.filter(h => h.text.indexOf(term) > -1);
+    if (filtered.length) {
+      this.setState({ selected: filtered[0].id });
+    } else {
+      this.setState({ selected: null });
+    }
+    this.setState({ filtered });
+  }
+
   scroll(refID) {
     ReactDOM.findDOMNode(
       this.refs[refID]
-    ).scrollIntoView({
+    ).scrollIntoViewIfNeeded({
       block: 'start', behavior: 'smooth'
     });
   }
 
   nav(dir) {
     let next;
+    const history = this.state.filtered || this.props.history;
 
     if (!this.state.selected) {
-      next = this.props.history[0].id;
+      next = history[0].id;
     } else {
-      const index = this.props.history.findIndex(el => el.id === this.state.selected);
-      if (dir === 'down') {
+      const index = history.findIndex(el => el.id === this.state.selected);
+      if (dir === 'up') {
         if (index === 0) return;
-        next = this.props.history[index - 1].id;
+        next = history[index - 1].id;
       } else {
-        if (index === this.props.history.length - 1) return;
-        next = this.props.history[index + 1].id;
+        if (index === history.length - 1) return;
+        next = history[index + 1].id;
       }
     }
 
@@ -107,7 +137,8 @@ export default class History extends Component {
 
   render() {
     const { selectHistory, history } = this.props;
-    let historyList = history.map((h, i) => (
+    const effectiveHistories = this.state.filtered || history;
+    let historyList = effectiveHistories.map((h, i) => (
         <li
           key={i}
           onClick={selectHistory.bind(this, h)}
@@ -124,12 +155,24 @@ export default class History extends Component {
     return (
       <div>
         <div className={styles.container}>
+          <div className={styles.searchContainer}>
+            <div className={styles.search}>
+              <input
+                type="text"
+                className={styles.searchInput}
+                ref="input"
+                onKeyUp={this.handleInputOnKeyUp.bind(this)}
+              />
+            </div>
+          </div>
           <div className={styles.logo}>
             <h1>CopyCat</h1>
           </div>
-          <ul>
-            {historyList}
-          </ul>
+          <div className={styles.listContainer}>
+            <ul>
+              {historyList}
+            </ul>
+          </div>
           <div className={styles.preview}>
             {this.getPreviewHtml()}
           </div>

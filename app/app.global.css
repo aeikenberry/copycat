@@ -5,6 +5,13 @@ body {
   background-color: rgb(42, 47, 58);
   font-family: Arial, Helvetica, Helvetica Neue;
   overflow-x: hidden;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  margin: 0;
+  padding: 0;
 }
 
 ::-webkit-scrollbar {
@@ -30,7 +37,7 @@ ul {
 
 li {
   list-style: none;
-  padding-bottom: 5px;
+  padding: 2px;
 }
 
 li.selected {

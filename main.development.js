@@ -13,7 +13,7 @@ const mb = menubar({
 
 mb.on('ready', () => {
   console.log('app is ready');
-  mb.window.setResizable(false);
+  // mb.window.setResizable(false);
   registerHotkey(() => {
     if (mb.window.isVisible()) {
       mb.hideWindow();
