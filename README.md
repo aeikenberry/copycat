@@ -7,6 +7,7 @@
 - Settings (Global Hotkey is current Cmd or Ctrl + Shift + C
 - Pictures
 - Focusing issues
+- Releases
 
 Based on the great boilerplate Electron + React project: https://github.com/chentsulin/electron-react-boilerplate and Menubar: https://github.com/maxogden/menubar
 
