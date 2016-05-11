@@ -9,11 +9,11 @@
 - Focusing issues
 - Releases
 
+## About
+
 Based on the great boilerplate Electron + React project: https://github.com/chentsulin/electron-react-boilerplate and Menubar: https://github.com/maxogden/menubar
 
 [Electron](http://electron.atom.io/) application boilerplate based on [React](https://facebook.github.io/react/), [Redux](https://github.com/reactjs/redux), [React Router](https://github.com/reactjs/react-router), [Webpack](http://webpack.github.io/docs/), [React Transform HMR](https://github.com/gaearon/react-transform-hmr) for rapid application development
-
-## Screenshot
 
 ![](https://dl.dropboxusercontent.com/u/12840891/Screen%20Shot%202016-05-10%20at%2011.36.15%20PM.png)
 
