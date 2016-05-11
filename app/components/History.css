@@ -49,6 +49,10 @@ li {
   right: 0;
 }
 
+pre {
+  white-space: pre-wrap;
+}
+
 .logo {
   bottom: 0;
   position: fixed;
