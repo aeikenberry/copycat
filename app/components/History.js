@@ -57,7 +57,7 @@ export default class History extends Component {
     });
 
     setInterval(() => {
-      this.props.addHistoryIfNeeded(clipboard.readText(), clipboard.readHtml());
+      this.props.addHistoryIfNeeded(clipboard.readText(), clipboard.readHtml() || clipboard.readText());
     }, 1000);
   }
 
