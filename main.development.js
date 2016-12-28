@@ -26,7 +26,7 @@ mb.on('ready', () => {
 mb.app.on('will-quit', () => { unregisterHotkeys(); });
 
 const registerHotkey = (cb) => {
-  globalShortcut.register('CommandOrControl+Shift+C', cb);
+  globalShortcut.register('CommandOrControl+Shift+D', cb);
 };
 
 const unregisterHotkeys = () => {
